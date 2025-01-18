@@ -1,3 +1,4 @@
+const { ModuleFederationPlugin } = require('webpack').container;
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {VueLoaderPlugin} = require('vue-loader');
@@ -5,8 +6,7 @@ const {VueLoaderPlugin} = require('vue-loader');
 module.exports = {
     entry: './src/main.js',
     output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist'),
+        publicPath: 'http://localhost:8081/',
     },
     module: {
         rules: [
@@ -32,14 +32,37 @@ module.exports = {
         extensions: ['*', '.js', '.vue', '.json'],
     },
     plugins: [
+        new ModuleFederationPlugin({
+            name: 'remoteApp',
+            filename: 'remoteEntry.js',
+            exposes: {
+                './RemoteApp': './src/RemoteApp.vue',
+            },
+            shared: {
+                vue: {
+                    singleton: false,
+                    strictVersion: true,
+                    requiredVersion: '^2.6.14',
+                },
+            },
+        }),
         new HtmlWebpackPlugin({
             template: './src/index.html',
         }),
         new VueLoaderPlugin(),
     ],
     devServer: {
-        static: path.resolve(__dirname, 'dist'),
+        static: {
+            directory: path.join(__dirname, "dist")
+        },
         compress: true,
         port: 8081,
+        hot: true,
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+            "Access-Control-Allow-Headers":
+                "X-Requested-With, content-type, Authorization",
+        },
     },
 };

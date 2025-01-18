@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <h1>This is VueJS MS 1!</h1>
+    <h1>This is Remote Application!</h1>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App',
+  name: 'RemoteApp',
 };
 </script>
 

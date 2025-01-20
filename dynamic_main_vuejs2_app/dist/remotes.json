@@ -1,0 +1,7 @@
+{
+  "remoteApp": {
+    "url": "http://localhost:8081/remoteEntry.js",
+    "scope": "remoteApp",
+    "module": "./RemoteApp"
+  }
+}

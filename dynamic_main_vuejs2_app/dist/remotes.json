@@ -1,7 +1,15 @@
 {
-  "remoteApp": {
-    "url": "http://localhost:8081/remoteEntry.js",
-    "scope": "remoteApp",
-    "module": "./RemoteApp"
-  }
+  "remotes": [
+    {
+      "scope": "remoteApp",
+      "url": "http://localhost:8081/remoteEntry.js",
+      "component": "RemoteApp"
+    },
+    {
+      "scope": "anotherRemoteApp",
+      "url": "http://localhost:8082/remoteEntry.js",
+      "component": "AnotherRemoteApp"
+    }
+  ]
 }
+

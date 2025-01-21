@@ -3,7 +3,7 @@
     <!-- Számláló UI bootstrap-esztétikával -->
     <div class="row justify-content-center mb-3">
       <div class="col-auto">
-        <h2>Count: {{ count }}, arra az esetre hogy műxik-e még a JS</h2>
+        <h2>Count: {{ count }}, (demó célra)</h2>
       </div>
     </div>
     <div class="row justify-content-center mb-5">
@@ -14,27 +14,43 @@
       </div>
     </div>
 
-
     <div class="card">
       <div class="card-header">
-        Itt lesznek a REMOTE APP-ok ebben a card-ban
+        Itt lesznek a REMOTE APP-ok egymás mellett
       </div>
       <div class="card-body">
-        <!-- Hibaüzenet -->
+        <!-- 1) Fő hibaüzenet, ha pl. a /remotes.json nem érhető el -->
         <div v-if="error" class="alert alert-danger" role="alert">
           Hiba történt: {{ error }}
         </div>
-        <!-- Töltés -->
-        <div v-else-if="loading" class="alert alert-info" role="alert">
-          Loading remote app...
+
+        <!-- 2) Részleges hibák (ha 1-1 remote betöltése nem sikerült), de a többi működhet -->
+        <div v-if="loadErrors.length" class="alert alert-warning" role="alert">
+          <p>Néhány remote nem volt elérhető:</p>
+          <ul>
+            <li v-for="(err, idx) in loadErrors" :key="'err'+idx">{{ err }}</li>
+          </ul>
         </div>
-        <component :is="RemoteComponent" v-else />
+
+        <!-- 3) Töltési állapot (akkor látszik, ha még nincs hiba és fut a betöltés) -->
+        <div v-else-if="loading" class="alert alert-info" role="alert">
+          Loading remote apps...
+        </div>
+
+        <!-- 4) A sikeresen betöltött remote komponensek egymás mellett -->
+        <div class="row">
+          <div
+              class="col"
+              v-for="(Comp, idx) in remoteComponents"
+              :key="idx"
+          >
+            <component :is="Comp" />
+          </div>
+        </div>
       </div>
     </div>
-    <!-- Remote komponens -->
   </div>
 </template>
-
 
 <script>
 import { loadRemote } from './loadRemote.js';
@@ -43,10 +59,11 @@ export default {
   name: 'App',
   data() {
     return {
-      loading: true,
-      error: null,
-      RemoteComponent: null,
-      count: 0,
+      loading: true,          // betöltés folyamatban van-e
+      error: null,            // ha a /remotes.json sem tölthető le
+      loadErrors: [],         // ha 1-1 remote fut hibára
+      remoteComponents: [],   // betöltött remote komponensek
+      count: 0,               // számláló demo
     };
   },
   methods: {
@@ -56,27 +73,36 @@ export default {
   },
   async mounted() {
     try {
-      // 1. Lekérjük a remotek konfigurációját:
+      // 1) Lekérjük a /remotes.json tartalmát
       const response = await fetch('/remotes.json');
-      const remotes = await response.json();
+      if (!response.ok) {
+        throw new Error(`Nem sikerült lekérni a /remotes.json-t: ${response.status}`);
+      }
+      const { remotes } = await response.json();
 
-      // 2. Tegyük fel, hogy a "remoteApp" kulcsú bejegyzés érdekel:
-      const { url, scope, module } = remotes.remoteApp;
+      // 2) Ciklusban végigmegyünk a definíciókon, minden remote-ot megpróbálunk betölteni
+      for (const { scope, url, component } of remotes) {
+        try {
+          // a) remoteEntry.js betöltése
+          const container = await loadRemote(url, scope);
 
-      // 3. Betöltjük magát a remote scriptet futásidőben:
-      const container = await loadRemote(url, scope);
+          // b) a kiválasztott modul lekérése (pl. './RemoteApp')
+          const factory = await container.get(`./${component}`);
+          const mod = factory();
 
-      // 4. A container.get(...) segítségével lekérjük a kívánt modult
-      const factory = await container.get(module);
-      // factory() meghívás után kapjuk a valódi exported modult
-      const remoteModule = factory();
-
-      // 5. Ha a remote modul Vue komponensként `export default ...`-ot ad vissza,
-      // akkor a .default lesz a komponens:
-      this.RemoteComponent = remoteModule.default ?? remoteModule;
+          // c) a modul default exportja (várhatóan Vue komponens)
+          this.remoteComponents.push(mod.default || mod);
+        } catch (remoteErr) {
+          // Ha az adott remoteApp betöltése hibás, logoljuk
+          console.error(`Hiba a remote (${scope}) betöltésekor:`, remoteErr);
+          this.loadErrors.push(`Remote (${scope}): ${remoteErr}`);
+        }
+      }
     } catch (err) {
+      // Ha már a JSON betöltése sem sikerült, ezt a fő "error" mezőbe írjuk
       this.error = err.toString();
     } finally {
+      // A töltés mindenképp véget ér (akár siker, akár hiba)
       this.loading = false;
     }
   },

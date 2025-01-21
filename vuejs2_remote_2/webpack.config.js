@@ -33,10 +33,10 @@ module.exports = {
     },
     plugins: [
         new ModuleFederationPlugin({
-            name: 'remoteApp',
+            name: 'anotherRemoteApp',
             filename: 'remoteEntry.js',
             exposes: {
-                './RemoteApp': './src/AnotherRemoteApp.vue',
+                './AnotherRemoteApp': './src/AnotherRemoteApp.vue',
             },
             shared: {
                 vue: {

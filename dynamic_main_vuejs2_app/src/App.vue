@@ -44,7 +44,7 @@
               v-for="(Comp, idx) in remoteComponents"
               :key="idx"
           >
-            <component :is="Comp" />
+            <safe-remote-component :component="Comp" />
           </div>
         </div>
       </div>
@@ -54,9 +54,11 @@
 
 <script>
 import { loadRemote } from './loadRemote.js';
+import SafeRemoteComponent from "./SafeRemoteComponent.vue";
 
 export default {
   name: 'App',
+  components: {SafeRemoteComponent},
   data() {
     return {
       loading: true,          // betöltés folyamatban van-e

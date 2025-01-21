@@ -44,6 +44,9 @@ export default {
       showAlert: false,
     };
   },
+  mounted() {
+    // throw new Error('Ez itt egy szándékos hiba a remote komponensben!');
+  },
   methods: {
     doSomething() {
       // Itt a natív "alert" helyett most csak egy boolean-t állítunk be,

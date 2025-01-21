@@ -1,18 +1,40 @@
 <template>
-  <div id="app">
-    <h1>Hello Vue 2!</h1>
-
-    <div v-if="error" style="color: red">
-      Hiba történt: {{ error }}
+  <div id="app" class="container py-5">
+    <!-- Számláló UI bootstrap-esztétikával -->
+    <div class="row justify-content-center mb-3">
+      <div class="col-auto">
+        <h2>Count: {{ count }}, arra az esetre hogy műxik-e még a JS</h2>
+      </div>
+    </div>
+    <div class="row justify-content-center mb-5">
+      <div class="col-auto">
+        <button class="btn btn-primary" @click="incrementCount">
+          Növel
+        </button>
+      </div>
     </div>
 
-    <div v-else-if="loading">
-      Loading remote app...
-    </div>
 
-    <component :is="RemoteComponent" v-else />
+    <div class="card">
+      <div class="card-header">
+        Itt lesznek a REMOTE APP-ok ebben a card-ban
+      </div>
+      <div class="card-body">
+        <!-- Hibaüzenet -->
+        <div v-if="error" class="alert alert-danger" role="alert">
+          Hiba történt: {{ error }}
+        </div>
+        <!-- Töltés -->
+        <div v-else-if="loading" class="alert alert-info" role="alert">
+          Loading remote app...
+        </div>
+        <component :is="RemoteComponent" v-else />
+      </div>
+    </div>
+    <!-- Remote komponens -->
   </div>
 </template>
+
 
 <script>
 import { loadRemote } from './loadRemote.js';
@@ -24,7 +46,13 @@ export default {
       loading: true,
       error: null,
       RemoteComponent: null,
+      count: 0,
     };
+  },
+  methods: {
+    incrementCount() {
+      this.count++;
+    },
   },
   async mounted() {
     try {

@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <h1>This is Remote Application!</h1>
+    <h1>This is Remote 2 Application!</h1>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'RemoteApp',
+  name: 'AnotherRemoteApp',
 };
 </script>
 

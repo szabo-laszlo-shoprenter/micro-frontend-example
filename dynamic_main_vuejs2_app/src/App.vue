@@ -74,7 +74,7 @@ export default {
   async mounted() {
     try {
       // 1) Lekérjük a /remotes.json tartalmát
-      const response = await fetch('/remotes.json');
+      const response = await fetch('https://run.mocky.io/v3/ef0959fb-6c06-4aa6-8c97-084e930ce8db');
       if (!response.ok) {
         throw new Error(`Nem sikerült lekérni a /remotes.json-t: ${response.status}`);
       }

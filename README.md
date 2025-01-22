@@ -1,12 +1,18 @@
 # micro-frontend-example
 
+# Felépítés
 - dynamic_main_vuejs2_app -> ez lesz a host
 - vuejs2_remote_1 -> ez lesz az egyik remote
 - vuejs2_remote_2 -> ez lesz a másik remote
 
-Node 14-el van összelőve, mindegyik mappában npm install után npm run serve és a fő app a http://localhost:8080-on lesz elérhető.
+# Beüzemelés
+Node 14-el van összelőve, mindegyik mappában `npm install` után `npm run serve` és a fő app a http://localhost:8080-on lesz elérhető.
 
-Az hogy a remote-ok honnan jöjjenek egy free hostingra kiteheted a JSON-t és az dynamic_main_vuejs2_app/src/App.vue-ban tudod állítani hogy honnan húzza a JSON-t így igazolva hogy tutira run time húzza a remote-okat.
+# Remote lista elérése
+A lényeg hogy runtime történik nem build time.
+
+- dynamic_main_vuejs2_app/src/App.vue:79
+A fenti fájl 79. sorában van hogy most lokálról olvassa a JSON-t, de át lehet írni a hostingosra is. (Free hosting: https://designer.mocky.io/)
 
 A JSON tartalma:
 ```json
@@ -25,6 +31,11 @@ A JSON tartalma:
   ]
 }
 ```
+
+# Hibakezelés
+
+Az a cél hogy ha valamelyik remote nem elérhető vagy hibás akkor se a fő alkalmazást se a remoteokat ne tudja leölni, azok működjenek tovább.
+
 Hibákat tudsz szimulálni, ha
 - a remoteEntry.js-t nem találja
 - a remoteEntry.js-ben nem találja a komponenst

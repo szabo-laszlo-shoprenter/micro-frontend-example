@@ -9,6 +9,11 @@
       "scope": "anotherRemoteApp",
       "url": "http://localhost:8082/remoteEntry.js",
       "component": "AnotherRemoteApp"
+    },
+    {
+      "scope": "vueJS3App",
+      "url": "http://localhost:8083/remoteEntry.js",
+      "component": "VueJS3App"
     }
   ]
 }

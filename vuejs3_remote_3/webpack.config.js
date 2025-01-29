@@ -4,7 +4,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {VueLoaderPlugin} = require('vue-loader');
 
 module.exports = {
-    entry: './src/main.js',
+    entry: {
+        // Eredeti main, ha akarod standalone futtatni
+        'main': './src/main.js',
+        // Külön entry, ami custom elementet definál
+        'main-web-component': './src/main-web-component.js'
+    },
     output: {
         publicPath: 'http://localhost:8083/',
     },
@@ -33,15 +38,17 @@ module.exports = {
             name: 'vueJS3App',
             filename: 'remoteEntry.js',
             exposes: {
-                './VueJS3App': './src/VueJS3App.vue',
+                // Legyen egy kulcs, ami elérhetővé teszi a custom element-es entry-t
+                './Vue3WebComponent': './src/main-web-component.js',
             },
             shared: {
+                // Célszerű a Vue 3-at *nem* megosztani a hosttal, hiszen ott Vue2 fut
+                // Ha mindenképp meg akarod osztani, vegyél ki belőle strictVersion-t
                 vue: {
                     singleton: false,
-                    strictVersion: true,
                     requiredVersion: '^3.5',
-                },
-            },
+                }
+            }
         }),
         new HtmlWebpackPlugin({
             template: './src/index.html',

@@ -11,9 +11,12 @@
       "component": "AnotherRemoteApp"
     },
     {
-      "scope": "vueJS3App",
+      "name": "Vue3RemoteAsWC",
       "url": "http://localhost:8083/remoteEntry.js",
-      "component": "VueJS3App"
+      "scope": "vueJS3App",
+      "tagName" : "my-vue3-element",
+      "component": "Vue3WebComponent",
+      "isWebComponent": true
     }
   ]
 }

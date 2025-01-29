@@ -11,6 +11,9 @@
         Üdv a harmadik remote komponensből! Ez is külön betöltött app,
         saját megjelenéssel és funkciókkal.
       </p>
+      <div class="card-text">
+        <p>PROPS ami a host-ból jön: {{ productData }}  </p>
+      </div>
       <!-- Gomb, amivel "előhívod" az értesítést -->
       <button @click="doSomething" class="btn btn-danger">
         Távoli gomb #2
@@ -37,6 +40,14 @@
 </template>
 
 <script setup>
+
+const props = defineProps({
+  productData: {
+    type: Object,
+    default: () => ({})
+  }
+});
+
 import { ref } from 'vue'
 
 // Egy ref() segítségével reagálunk a showAlert változásaira

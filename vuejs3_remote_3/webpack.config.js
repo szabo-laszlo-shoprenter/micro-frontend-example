@@ -47,7 +47,8 @@ module.exports = {
                 vue: {
                     singleton: false,
                     requiredVersion: '^3.5',
-                }
+                },
+                vuetify: { singleton: false, requiredVersion: '^3.0.0' },
             }
         }),
         new HtmlWebpackPlugin({

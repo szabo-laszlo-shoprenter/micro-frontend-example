@@ -1,59 +1,63 @@
 <template>
-  <div class="card mx-auto" style="width: 20rem; background-color: #f9f2f4">
-    <img
+  <!--
+    A Vuetify-ban a 'v-card', 'v-img', 'v-btn', 'v-alert' stb. komponensekkel
+    helyettesíthetjük a bootstrap-es elemeket.
+  -->
+  <v-card class="mx-auto ma-5" max-width="400">
+    <!-- Kép -->
+    <v-img
         src="https://picsum.photos/320/180"
-        class="card-img-top"
+        height="180"
         alt="Random image"
     />
-    <div class="card-body">
-      <h5 class="card-title">Ez itt a Remote 3 VueJS 3 APP</h5>
-      <p class="card-text">
-        Üdv a harmadik remote komponensből! Ez is külön betöltött app,
-        saját megjelenéssel és funkciókkal.
-      </p>
-      <div class="card-text">
-        <p>PROPS ami a host-ból jön: {{ productData }}  </p>
-      </div>
-      <!-- Gomb, amivel "előhívod" az értesítést -->
-      <button @click="doSomething" class="btn btn-danger">
+
+    <!-- Cím és szöveg -->
+    <v-card-title>Ez itt a Remote 3 VueJS 3 APP</v-card-title>
+    <v-card-text>
+      Üdv a harmadik remote komponensből! Ez is külön betöltött app,
+      saját megjelenéssel és funkciókkal.
+    </v-card-text>
+
+    <!-- A prop kiírása -->
+    <v-card-subtitle>
+      PROPS ami a host-ból jön: {{ productData }}
+    </v-card-subtitle>
+
+    <!-- Gomb és eseménykezelés -->
+    <v-card-actions>
+      <v-btn color="error" @click="doSomething">
         Távoli gomb #2
-      </button>
-      <!-- Látványosabb Bootstrap alert -->
-      <div
-          v-if="showAlert"
-          class="alert alert-warning alert-dismissible fade show mt-3"
-          role="alert"
-      >
-        A második távoli komponens gombja is működik!
-        <!-- Bezáró gomb -->
-        <button
-            type="button"
-            class="close"
-            aria-label="Close"
-            @click="hideAlert"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-    </div>
-  </div>
+      </v-btn>
+    </v-card-actions>
+
+    <!-- Figyelmeztető üzenet (alert) -->
+    <v-alert
+        v-if="showAlert"
+        type="warning"
+        class="ma-3"
+        dismissible
+        @click:close="hideAlert"
+    >
+      A második távoli komponens gombja is működik!
+    </v-alert>
+  </v-card>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 
+// A host alkalmazásból kapott adat (props)
 const props = defineProps({
   productData: {
     type: Object,
     default: () => ({})
   }
-});
+})
 
-import { ref } from 'vue'
-
-// Egy ref() segítségével reagálunk a showAlert változásaira
+// Megjelenjen-e a figyelmeztetés?
 const showAlert = ref(false)
 
-// Gombnyomáskor mutatja az értesítést, majd 4 mp után elrejti
+// Gombnyomáskor aktiválódik az alert, majd 4 mp múlva eltűnik
 function doSomething() {
   showAlert.value = true
   setTimeout(() => {
@@ -61,12 +65,12 @@ function doSomething() {
   }, 4000)
 }
 
-// Bezáró gombnál manuálisan is elrejthető az alert
+// A felhasználó manuálisan is bezárhatja az alertet
 function hideAlert() {
   showAlert.value = false
 }
 </script>
 
 <style scoped>
-/* Ide jöhetnek a komponens-specifikus stílusok */
+/* Komponens-specifikus stílusokat ide írhatsz, ha szükséges. */
 </style>

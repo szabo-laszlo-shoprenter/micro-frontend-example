@@ -5,7 +5,12 @@ const {VueLoaderPlugin} = require('vue-loader');
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 
 module.exports = {
-    entry: './src/main.js',
+    entry: {
+        // Eredeti main, ha akarod standalone futtatni
+        'main': './src/main.js',
+        // Külön entry, ami custom elementet definál
+        'main-web-component': './src/main-web-component.js'
+    },
     output: {
         publicPath: 'http://localhost:8084/',
     },
@@ -45,7 +50,8 @@ module.exports = {
             name: 'vuetify2App',
             filename: 'remoteEntry.js',
             exposes: {
-                './Vuetify2App': './src/Vuetify2App.vue',
+                // Legyen egy kulcs, ami elérhetővé teszi a custom element-es entry-t
+                './Vuetify2App': './src/main-web-component.js',
             },
             shared: {
                 vue: {

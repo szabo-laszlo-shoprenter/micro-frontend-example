@@ -11,49 +11,56 @@
         Üdv a remote komponensből! Itt be tudsz tenni bármilyen
         dinamikus adatot, amit a remote app szolgáltat.
       </p>
-      <!-- Gomb, amivel "előhívod" az értesítést -->
       <button @click="doSomething" class="btn btn-primary">
         Távoli gomb
       </button>
-            <!-- Látványosabb Bootstrap alert -->
-      <div
-          v-if="showAlert"
-          class="alert alert-success alert-dismissible fade show mt-3"
-          role="alert"
-      >
+
+      <div v-if="showAlert" class="alert alert-success alert-dismissible fade show mt-3" role="alert">
         Távoli komponens gombja is működik!
-        <!-- Bezáró gomb -->
-        <button
-            type="button"
-            class="close"
-            aria-label="Close"
-            @click="hideAlert"
-        >
+        <button type="button" class="close" aria-label="Close" @click="hideAlert">
           <span aria-hidden="true">&times;</span>
         </button>
+      </div>
+
+      <div class="mt-3">
+        <h6>Elérhető route-ok:</h6>
+        <ul>
+          <li v-for="route in routes" :key="route.path">{{ route.path }}</li>
+        </ul>
+      </div>
+
+      <div class="mt-3">
+        <h6>Környezet változók:</h6>
+        <ul>
+          <li v-for="(value, key) in envVars" :key="key">{{ key }}: {{ value }}</li>
+        </ul>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Vue from 'vue';
+import Router from 'vue-router';
+
 export default {
   name: 'RemoteApp',
   data() {
     return {
       showAlert: false,
+      routes: [],
+      envVars: {}
     };
   },
   mounted() {
-    // throw new Error('Ez itt egy szándékos hiba a remote komponensben!');
+    if (this.$router) {
+      this.routes = this.$router.options.routes.map(route => ({ path: route.path }));
+    }
+    this.envVars = process.env;
   },
   methods: {
     doSomething() {
-      // Itt a natív "alert" helyett most csak egy boolean-t állítunk be,
-      // így a "v-if" alapján megjelenik az alert a DOM-ban.
       this.showAlert = true;
-
-      // Opcionálisan pár másodperc múlva eltüntetheted automatikusan:
       setTimeout(() => {
         this.showAlert = false;
       }, 3000);

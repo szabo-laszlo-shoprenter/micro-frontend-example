@@ -11,6 +11,11 @@
       "component": "AnotherRemoteApp"
     },
     {
+      "scope": "vuetify2App",
+      "url": "http://localhost:8084/remoteEntry.js",
+      "component": "Vuetify2App"
+    },
+    {
       "name": "Vue3RemoteAsWC",
       "url": "http://localhost:8083/remoteEntry.js",
       "scope": "vueJS3App",

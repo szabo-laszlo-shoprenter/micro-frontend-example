@@ -53,13 +53,13 @@ module.exports = {
                 // Legyen egy kulcs, ami elérhetővé teszi a custom element-es entry-t
                 './Vuetify2App': './src/main-web-component.js',
             },
-            shared: {
-                vue: {
-                    singleton: false,
-                    strictVersion: true,
-                    requiredVersion: '^2.6.14',
-                },
-            },
+           // shared: {
+           //     vue: {
+           //         singleton: false,
+           //         strictVersion: true,
+           //         requiredVersion: '^2.6.14',
+           //     },
+          //  },
         }),
         new HtmlWebpackPlugin({
             template: './src/index.html',

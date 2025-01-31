@@ -11,10 +11,17 @@
     <v-card-text>
       Üdv a második remote komponensből! Ez is külön betöltött app, saját
       megjelenéssel és funkciókkal.
+
+      <div class="mt-3">
+        <h6>Elérhető route-ok:</h6>
+        <ul>
+          <li v-for="route in routes" :key="route.path">{{ route.path }}</li>
+        </ul>
+      </div>
     </v-card-text>
 
     <v-card-actions>
-      <v-btn @click="doSomething">
+      <v-btn color="primary" @click="doSomething">
         Távoli gomb #2
       </v-btn>
     </v-card-actions>
@@ -36,8 +43,15 @@ export default {
   name: 'Vuetify2App',
   data() {
     return {
+      routes: [],
       showAlert: false,
     };
+  },
+  mounted() {
+    if (this.$router) {
+      this.routes = this.$router.options.routes.map(route => ({ path: route.path }));
+    }
+    this.envVars = [];
   },
   methods: {
     doSomething() {

@@ -8,6 +8,7 @@
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
+import router from './router';
 
 // 2) A "vue-custom-element" csomag importálása
 import vueCustomElement from 'vue-custom-element'
@@ -26,6 +27,7 @@ const vuetify = new Vuetify()
 
 // 7) A Vue 2 komponenst webkomponenssé alakítjuk
 Vue.customElement('my-vue2-element', {
+    router: router,
     extends: MyVue2App,
     vuetify
 })

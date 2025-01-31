@@ -79,7 +79,7 @@
               v-for="(tagName, idx) in webComponents"
               :key="idx"
           >
-            <component :is="tagName" v-web-component-props-directive:productData="productData" />
+            <component v-if="webComponents.length" :is="tagName" v-web-component-props-directive:productData="productData" />
           </div>
         </div>
       </div>

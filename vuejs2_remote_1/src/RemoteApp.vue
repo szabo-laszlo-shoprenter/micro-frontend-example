@@ -56,7 +56,7 @@ export default {
     if (this.$router) {
       this.routes = this.$router.options.routes.map(route => ({ path: route.path }));
     }
-    this.envVars = process.env;
+    this.envVars = [];
   },
   methods: {
     doSomething() {

@@ -52,6 +52,13 @@ export default {
       this.routes = this.$router.options.routes.map(route => ({ path: route.path }));
     }
     this.envVars = [];
+    this.sendHeight();
+    // Ha a tartalom változhat (pl. adatbetöltés után vagy dinamikus komponens változáskor),
+    // érdemes event listener-t felrakni a resize eseményre vagy akár Vue watchert használni.
+    window.addEventListener('resize', this.sendHeight);
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.sendHeight);
   },
   methods: {
     doSomething() {
@@ -63,6 +70,12 @@ export default {
     hideAlert() {
       this.showAlert = false;
     },
+    sendHeight() {
+      // A teljes dokumentum magasságának kiszámítása
+      const height = document.documentElement.scrollHeight;
+      // Küldjük az üzenetet a parent ablaknak
+      window.parent.postMessage({ type: 'setHeight', height: height }, '*');
+    }
   },
 };
 </script>
